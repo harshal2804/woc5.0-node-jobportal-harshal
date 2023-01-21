@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Karla:wght@700&family=Poppins:wght@500&family=Roboto:wght@500&display=swap');
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+.student{
+    width: 600px;
+    height: 400px;
+    margin-left: 420px;
+    margin-top: 93px;
+
+    background-image: url(../../Images/studentPortal2.jpg);
+    border: 3px solid #FFFFFF;
+    border-radius: 30px;
+}
+
+.company{
+    width: 600px;
+    height: 400px;
+    margin-left: 420px;
+    margin-top: 93px;
+    margin-bottom: 93px;
+
+    background-image: url(../../Images/companyPortal2.jpg);
+    border: 3px solid #FFFFFF;
+    border-radius: 30px;
+}
+
+.student--text--bg{
+    position: absolute;
+    width: 320px;
+    height: 122px;
+    margin-left: 140px;
+    margin-top: 140px;
+
+    background-color: rgba(217, 217, 217, 0.79);
+    opacity: 0.5;
+    border-radius: 30px;
+}
+
+.student--text{
+    width: 199px;
+    height: 68px;
+    margin-left: 60px;
+    margin-top: 30px;
+    
+    font-family: 'Poppins';
+    font-weight: 300;
+    font-size: 50px;
+    line-height: 61px;
+    
+    background-color: rgba(217, 217, 217, 0.79);
+    color: #000000;
+}
+
+
+
+.company .student--text{
+    width: 234px;
+    height: 66px;
+    margin-left: 38px;
+    margin-top: 28px;
+}
