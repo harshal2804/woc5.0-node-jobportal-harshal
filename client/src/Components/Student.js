@@ -37,7 +37,7 @@ export default function Student() {
     }
 
     return (
-        <div className="main">
+        <div className="studentSignIn">
             <div className="bg">
                 <div className="title">Student Registration Form</div>
                 <div className="form--bg">

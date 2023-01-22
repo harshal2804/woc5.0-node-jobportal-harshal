@@ -1,4 +1,5 @@
 import React from 'react'
+import { useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
@@ -6,105 +7,115 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./css/Company.css"
+import axios from "axios"
 
 export default function Company() {
+
+    const data = {}
+    const [formData, setFormData] = useState(data);
+
+    const inputchangeHandler = (e) => {
+        setFormData({...formData, [e.target.id]: e.target.value});
+    }
+
+    const genderChangeHandler = (e) => {
+        setFormData({
+            ...formData,
+            male: "off",
+            female:"off",
+            other: "off",
+            [e.target.id]: e.target.value
+        })
+    }
+
+    const onSubmitHandler = (e) => {
+        e.preventDefault();
+        console.log(formData);
+        axios.post("http://localhost:5000/Company",formData).then(res => {
+            console.log(res);
+        })
+    }
+
     return (
-        <div className="main">
+        <div className="companySignIn">
             <div className="bg">
                 <div className="title">Company Registration Form</div>
                 <div className="form--bg">
-                    <Form action="https://localhost:5000/Company" method="POST">
+                    <Form>
                         <FloatingLabel
-                            controlId="floatingInput"
-                            label="Full name"
+                            controlId="companyName"
+                            label="Company name"
                             className="mb-3"
                         >
-                            <Form.Control name="fullname" type="text" placeholder="Enter your full name" />
+                            <Form.Control name="companyName" type="text" placeholder="Enter your company name" onChange={(e)=>inputchangeHandler(e)}/>
                         </FloatingLabel>
                         <FloatingLabel
-                            controlId="floatingInput"
+                            controlId="email"
                             label="Email address"
                             className="mb-3"
                         >
-                            <Form.Control name="email" type="email" placeholder="name@example.com" />
+                            <Form.Control name="email" type="email" placeholder="name@example.com" onChange={(e)=>inputchangeHandler(e)}/>
                             <Form.Text className="text-muted">
                                 We'll never share your email with anyone else.
                             </Form.Text>
                         </FloatingLabel>
 
-                        <FloatingLabel controlId="floatingPassword" label="Password">
-                            <Form.Control type="password" placeholder="Password" />
+                        <FloatingLabel controlId="password" label="Password">
+                            <Form.Control name="password" type="password" placeholder="Password" onChange={(e)=>inputchangeHandler(e)}/>
                         </FloatingLabel>
                         <br />
-                        <FloatingLabel controlId="floatingPassword" label="Confirm Password">
-                            <Form.Control type="password" placeholder="Password" />
+                        <FloatingLabel controlId="confirmPassword" label="Confirm Password">
+                            <Form.Control name="confirmPassword" type="password" placeholder="Password" onChange={(e)=>inputchangeHandler(e)}/>
                         </FloatingLabel>
                         <br />
                         <Row className="g-2">
                             <Col md>
                                 <FloatingLabel
-                                    controlId="floatingSelectGrid"
-                                    label="Select your batch"
+                                    controlId="requiredAge"
+                                    label="Select required age"
+                                    onChange={(e)=>inputchangeHandler(e)}
                                 >
-                                    <Form.Select aria-label="Floating label select example">
-                                        <option value="1">2019</option>
-                                        <option value="2">2020</option>
-                                        <option value="3">2021</option>
-                                        <option value="3">2022</option>
+                                    <Form.Select name="requiredAge" aria-label="Floating label select example">
+                                        <option value="18-21">18-21</option>
+                                        <option value="22-25">22-25</option>
+                                        <option value="26-29">26-29</option>
+                                        <option value="Above 29">Above 29</option>
+                                        <option value="Any">Any</option>
                                     </Form.Select>
                                 </FloatingLabel>
                             </Col>
                             <Col md>
-                                <FloatingLabel controlId="floatingInputGrid" label="CPI">
-                                    <Form.Control type="text" placeholder="name@example.com" />
+                                <FloatingLabel controlId="requiredCpi" label="Required CPI">
+                                    <Form.Control name="requiredCpi" type="number" placeholder="number" onChange={(e)=>inputchangeHandler(e)}/>
                                 </FloatingLabel>
                             </Col>
                         </Row>
                         <br />
-                        <Row className="g-2">
-                            <Col xs={5}>
-                                <FloatingLabel
-                                    controlId="floatingInput"
-                                    label="Age"
-                                    className="mb-3"
-                                    column lg={2}
-                                >
-                                    <Form.Control type="text" placeholder="Enter your age" />
-                                </FloatingLabel>
-                            </Col>
-                            <Col>
-                                <Row className="g-2">
-                                    <Form.Label>Gender</Form.Label>
-                                    <div key="inline-radio" className="mb-3">
-                                        <Form.Check
-                                            inline
-                                            label="Male"
-                                            name="group1"
-                                            type="radio"
-                                            id="inline-radio-1"
-                                        />
-                                        <Form.Check
-                                            inline
-                                            label="Female"
-                                            name="group1"
-                                            type="radio"
-                                            id="inline-radio-2"
-                                        />
-                                        <Form.Check
-                                            inline
-                                            label="Other"
-                                            type="radio"
-                                            id="inline-radio-3"
-                                        />
-                                    </div>
-                                </Row>
-                            </Col>
-                        </Row>
-                        <Form.Label>TechStack</Form.Label>
-                        {/* <Form.Control type="text" placeholder="Eg: HTML, CSS, JS,..." /> */}
-                        <Form.Control as="textarea" rows={2} placeholder="Eg: HTML, CSS, JS,..."/>
+                        <FloatingLabel
+                            controlId="officialWebsite"
+                            label="Official Website"
+                            className="mb-3"
+                        >
+                            <Form.Control name="officialWebsite" type="text" placeholder="Enter your official website" onChange={(e)=>inputchangeHandler(e)}/>
+                        </FloatingLabel>
+                        <FloatingLabel
+                            controlId="position"
+                            label="Position"
+                            className="mb-3"
+                        >
+                            <Form.Control name="position" type="text" placeholder="Enter position" onChange={(e)=>inputchangeHandler(e)}/>
+                        </FloatingLabel>
+                        <FloatingLabel
+                            controlId="package"
+                            label="Package"
+                            className="mb-3"
+                        >
+                            <Form.Control name="package" type="text" placeholder="Enter package" onChange={(e)=>inputchangeHandler(e)}/>
+                        </FloatingLabel>
+                        <Form.Label>Description</Form.Label>
+                        <Form.Control id="description" type="text" as="textarea" rows={2} placeholder="Eg: Our company is basically on React" onChange={(e)=>inputchangeHandler(e)}/>
                         <br />
-                        <Button variant="primary" type="submit">
+                        <Button variant="primary" type="submit" onClick={(e)=>{onSubmitHandler(e)}}>
                             Submit
                         </Button>
                     </Form>

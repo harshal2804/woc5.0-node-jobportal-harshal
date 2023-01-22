@@ -51,6 +51,30 @@ app.post("/Student", (req, res) => {
     return res.redirect('Home.js')
 })
 
+app.post("/Company", (req, res) => {
+
+    var data = {
+        "companyName": req.body.companyName,
+        "email": req.body.email,
+        "password":  req.body.password,
+        "confirmPassword": req.body.confirmPassword,
+        "requiredAge": req.body.requiredAge,
+        "requiredCpi": req.body.requiredCpi,
+        "officialWebsite": req.body.officialWebsite,
+        "position": req.body.position,
+        "package": req.body.package,
+        "description": req.body.description
+    }
+
+    db.collection('CompanyDetails').insertOne(data,(err,collection)=>{
+        if(err){
+            throw err;
+        }
+        console.log("Record Inserted Successfully");
+    });
+    return res.redirect('Home.js')
+})
+
 app.get("/",(req, res) => {
     res.set({
         "Allow-access-Allow-Origin": '*'
