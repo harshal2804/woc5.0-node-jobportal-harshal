@@ -5,7 +5,11 @@ import { Link } from "react-router-dom"
 export default function Home() {
     return (
         <div className="main">
-            <div className="main--title">Welcome to LinkedOut</div>
+            <div className="main--title">
+                <div className="one">Welcome to </div>
+                <div className="two">Linked</div>
+                <div className="three">Out</div>
+            </div>
             <div className="title">Choose your role</div>
             <Link to="/Student">
             <div className="student">

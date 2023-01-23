@@ -8,6 +8,7 @@ import Col from 'react-bootstrap/Col'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./css/Company.css"
 import axios from "axios"
+import { Link } from 'react-router-dom'
 
 export default function Company() {
 
@@ -18,22 +19,16 @@ export default function Company() {
         setFormData({...formData, [e.target.id]: e.target.value});
     }
 
-    const genderChangeHandler = (e) => {
-        setFormData({
-            ...formData,
-            male: "off",
-            female:"off",
-            other: "off",
-            [e.target.id]: e.target.value
-        })
-    }
-
     const onSubmitHandler = (e) => {
         e.preventDefault();
         console.log(formData);
         axios.post("http://localhost:5000/Company",formData).then(res => {
             console.log(res);
         })
+        axios.post("http://localhost:5000/CompanyProfile",formData).then(res => {
+            console.log(res);
+        })
+        
     }
 
     return (
@@ -115,8 +110,10 @@ export default function Company() {
                         <Form.Label>Description</Form.Label>
                         <Form.Control id="description" type="text" as="textarea" rows={2} placeholder="Eg: Our company is basically on React" onChange={(e)=>inputchangeHandler(e)}/>
                         <br />
-                        <Button variant="primary" type="submit" onClick={(e)=>{onSubmitHandler(e)}}>
+                        <Button value="Submit" variant="primary" type="submit" onClick={(e)=>{onSubmitHandler(e)}}>
+                        <Link to="/CompanyProfile" style={{ color: '#FFFFFF', textDecoration: "none" }}>
                             Submit
+                        </Link>
                         </Button>
                     </Form>
                 </div>

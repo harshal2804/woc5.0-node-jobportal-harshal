@@ -51,6 +51,25 @@ app.post("/Student", (req, res) => {
     return res.redirect('Home.js')
 })
 
+app.post("/CompanyProfile", (req, res) => {
+    db.collection('CompanyProfile').insertOne(req.body,(err,collection)=>{
+        if(err){
+            throw err;
+        }
+        console.log("Record Inserted Successfully");
+    });
+})
+
+app.get("/CompanyProfile", (req, res) => {
+    db.collection('CompanyProfile').find({}).toArray(function (err, result) {
+        if (err) {
+          res.status(400).send("Error fetching listings!");
+       } else {
+          res.json(result);
+        }
+    })
+})
+
 app.post("/Company", (req, res) => {
 
     var data = {

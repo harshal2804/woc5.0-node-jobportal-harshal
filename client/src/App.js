@@ -2,6 +2,7 @@ import React from 'react'
 import Home from './Components/Home'
 import Student from './Components/Student'
 import Company from './Components/Company'
+import CompanyProfile from './Components/CompanyProfile';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -23,6 +24,11 @@ function App() {
     {
       path: "/Company",
       element: <Company/>
+    },
+
+    {
+      path: "/CompanyProfile",
+      element: <CompanyProfile/>,
     }
   ])
 

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Karla:wght@700&family=Poppins:wght@500&family=Roboto:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Karla:wght@700&family=Poppins:wght@500&family=Quicksand&family=Roboto:wght@500&display=swap');
 *{
     margin: 0px;
     padding: 0px;
@@ -11,8 +11,8 @@
 }
 
 .companySignIn .title{
-    font-family: 'Quicksand', sans-serif;
-    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
     font-size: 33px;
     line-height: 40px;
     color: white;
@@ -24,7 +24,7 @@
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    width: 1102px;
+    width: 1300px;
     height: 930px;
     margin-top: 80px;
     margin-bottom: 80px;
