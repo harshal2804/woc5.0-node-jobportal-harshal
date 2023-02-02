@@ -3,17 +3,25 @@ import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button"
 import "./css/Profile.css"
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios"
 
 export default function CompanyProfile() {
 
     const [data, setData] = useState([]);
+    const location = useLocation()
 
     useEffect(() => {
-        axios.get("http://localhost:5000/CompanyProfile").then(res => {
-            console.log(res.data[0])
-            setData(res.data[0])
-        })
+        console.log(location.state.accessToken)
+        axios.get("http://localhost:5000/CompanyDetails", {
+                    headers: {
+                        Authorization: 'Bearer '+ location.state.accessToken
+                    }
+                })
+                .then(res => {
+                    console.log(res.data)
+                    setData(res.data)
+                })
     }, []);
 
     return (

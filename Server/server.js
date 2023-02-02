@@ -30,9 +30,6 @@ var db = mongoose.connection;
 db.on('error', () => console.log("Error in Connecting to Database"));
 db.once('open', () => console.log("Connected to Database"));
 
-app.post("/", (req, res) => {
-    console.log(`Hello ${req.body.name}`);
-})
 
 app.post("/Student", async (req, res) => {
     console.log(req.body)
@@ -64,10 +61,6 @@ app.post("/Student", async (req, res) => {
 
 })
 
-app.get("/Student/login", (req, res) => {
-    res.send("Hello from /Srudent/login");
-})
-
 app.post("/Student/login", async (req, res) => {
     const student = await db.collection('StudentDetails').findOne({ email: req.body.email });
     if (student == null) {
@@ -92,51 +85,66 @@ app.get("/StudentDetails", authenticateToken, async (req, res) => {
     res.json(student)
 })
 
-app.delete("/StudentProfile", (req, res) => {
-    db.collection('StudentProfile').deleteMany({})
+app.post("/Company", async (req, res) => {
+
+    // var data = req.body
+    // data = {...data, requiredCpi: parseInt(req.body.requiredCpi, 10)}
+
+    // db.collection('CompanyDetails').insertOne(data, (err, collection) => {
+    //     if (err) {
+    //         throw err;
+    //     }
+    //     console.log("Record Inserted Successfully");
+    // });
+    // return res.redirect('Home.js')
+    try {
+        const user = await db.collection('CompanyDetails').findOne({ email:req.body.email })
+        console.log(user)
+        if(user){
+            return res.json({ status:'error', user:false })
+        }
+
+        const accessToken = jwt.sign(req.body.email, process.env.ACCESS_TOKEN_SECRET)
+
+        const salt = await bcrypt.genSalt()
+        const hashedPassword = await bcrypt.hash(req.body.password, salt);
+        console.log(hashedPassword);
+        const data = { ...req.body, password: hashedPassword };
+
+        db.collection('CompanyDetails').insertOne(data, (err, collection) => {
+            if (err) {
+                throw err;
+            }
+            console.log("Company signed up successfully!");
+        });
+        res.json({ status: 'ok', user: true, accessToken: accessToken })
+    } catch {
+        res.json({ status: 'error' })
+    }
 })
 
-app.post("/CompanyProfile", (req, res) => {
-    db.collection('CompanyProfile').insertOne(req.body, (err, collection) => {
-        if (err) {
-            throw err;
+app.post("/Company/login", async (req, res) => {
+    const company = await db.collection('CompanyDetails').findOne({ email: req.body.email });
+    if (company == null) {
+        res.json({ status: 'error', user: false })
+    }
+    try {
+        if (await bcrypt.compare(req.body.password, company.password)) {
+            const accessToken = jwt.sign(req.body.email, process.env.ACCESS_TOKEN_SECRET)
+            res.json({ status: 'ok', user: true, accessToken:accessToken })
         }
-        console.log("Record Inserted Successfully");
-    });
+        else {
+            res.json({ status: 'error', user: false })
+        }
+    } catch {
+        res.status(500).send()
+    }
 })
 
-app.get("/CompanyProfile", (req, res) => {
-    db.collection('CompanyProfile').find({}).toArray(function (err, result) {
-        if (err) {
-            res.status(400).send("Error fetching listings!");
-        } else {
-            res.json(result);
-        }
-    })
-})
+app.get("/CompanyDetails", authenticateToken, async (req, res) => {
 
-app.get("/Company", (req, res) => {
-    db.collection('CompanyDetails').find({}).toArray(function (err, result) {
-        if (err) {
-            res.status(400).send("Error fetching listings!");
-        } else {
-            res.json(result);
-        }
-    })
-})
-
-app.post("/Company", (req, res) => {
-
-    var data = req.body
-    data = {...data, requiredCpi: parseInt(req.body.requiredCpi, 10)}
-
-    db.collection('CompanyDetails').insertOne(data, (err, collection) => {
-        if (err) {
-            throw err;
-        }
-        console.log("Record Inserted Successfully");
-    });
-    return res.redirect('Home.js')
+    const student = await db.collection('CompanyDetails').findOne({ email: req.email })
+    res.json(student)
 })
 
 app.get("/CompanyList", async (req, res) => {

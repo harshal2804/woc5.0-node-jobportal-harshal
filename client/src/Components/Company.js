@@ -8,12 +8,13 @@ import Col from 'react-bootstrap/Col'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./css/Company.css"
 import axios from "axios"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function Company() {
 
-    const data = {}
-    const [formData, setFormData] = useState(data);
+    const [formData, setFormData] = useState({});
+    const [user, setUser] = useState({})
+    const navigate = useNavigate()
 
     const inputchangeHandler = (e) => {
         setFormData({...formData, [e.target.id]: e.target.value});
@@ -24,9 +25,10 @@ export default function Company() {
         console.log(formData);
         axios.post("http://localhost:5000/Company",formData).then(res => {
             console.log(res);
-        })
-        axios.post("http://localhost:5000/CompanyProfile",formData).then(res => {
-            console.log(res);
+            setUser(res.data.user)
+            if(res.data.user){
+                navigate('/CompanyProfile',{ replace: true, state: { user:true, accessToken:res.data.accessToken }})
+            }
         })
         
     }
@@ -36,6 +38,7 @@ export default function Company() {
             <div className="bg">
                 <div className="title">Company Registration Form</div>
                 <div className="form--bg">
+                {user===false && <div className='error'> ❗User with this email id is already exists</div>}
                     <Form>
                         <FloatingLabel
                             controlId="companyName"
@@ -111,10 +114,9 @@ export default function Company() {
                         <Form.Control id="description" type="text" as="textarea" rows={2} placeholder="Eg: Our company is basically on React" onChange={(e)=>inputchangeHandler(e)}/>
                         <br />
                         <Button value="Submit" variant="primary" type="submit" onClick={(e)=>{onSubmitHandler(e)}}>
-                        <Link to="/CompanyProfile" style={{ color: '#FFFFFF', textDecoration: "none " }}>
                             Submit
-                        </Link>
                         </Button>
+                        <div className='footer'>Already have an account? <Link to="/Company/login">Login</Link></div>
                     </Form>
                 </div>
             </div>

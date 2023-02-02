@@ -63,6 +63,7 @@ export default function StudentLogin() {
                         <FloatingLabel controlId="password" label="Password">
                             <Form.Control name="password" type="password" placeholder="Password" onChange={(e) => inputchangeHandler(e)} />
                         </FloatingLabel>
+                        <br/>
                         <Button variant="primary" type="submit" onClick={(e) => { onSubmitHandler(e) }}>
                             {/* <Link to="/StudentProfile" style={{ color: '#FFFFFF', textDecoration: "none " }}> */}
                                 Log In

@@ -145,9 +145,7 @@ export default function Student() {
                         <Form.Control id="techStack" type="text" as="textarea" rows={2} placeholder="Eg: HTML, CSS, JS,..." onChange={(e) => inputchangeHandler(e)} />
                         <br />
                         <Button variant="primary" type="submit" onClick={(e) => { onSubmitHandler(e) }}>
-                            {/* <Link to="/StudentProfile" style={{ color: '#FFFFFF', textDecoration: "none " }}> */}
                                 Register
-                            {/* </Link> */}
                         </Button>
                         <div className='footer'>Already have an account? <Link to="/Student/login">Login</Link></div>
                     </Form>

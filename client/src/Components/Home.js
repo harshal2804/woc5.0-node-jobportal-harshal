@@ -7,8 +7,8 @@ export default function Home() {
         <div className="main">
             <div className="main--title">
                 <div className="one">Welcome to </div>
-                <div className="two">Linked</div>
-                <div className="three">Out</div>
+                <div className="two">Job</div>
+                <div className="three">Hub</div>
             </div>
             <div className="title">Choose your role</div>
             <Link to="/Student">
