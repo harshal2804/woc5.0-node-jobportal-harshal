@@ -8,21 +8,23 @@ import Col from 'react-bootstrap/Col'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./css/Student.css"
 import axios from "axios"
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function Student() {
 
-    const data = {}
-    const [formData, setFormData] = useState(data);
+    const [formData, setFormData] = useState({});
+    const [user, setUser] = useState(null);
+    const navigate = useNavigate()
 
     const inputchangeHandler = (e) => {
-        setFormData({...formData, [e.target.id]: e.target.value});
+        setFormData({ ...formData, [e.target.id]: e.target.value });
     }
 
     const genderChangeHandler = (e) => {
         setFormData({
             ...formData,
             male: "off",
-            female:"off",
+            female: "off",
             other: "off",
             [e.target.id]: e.target.value
         })
@@ -31,8 +33,12 @@ export default function Student() {
     const onSubmitHandler = (e) => {
         e.preventDefault();
         console.log(formData);
-        axios.post("http://localhost:5000/Student",formData).then(res => {
-            console.log(res);
+        axios.post("http://localhost:5000/Student", formData).then(res => {
+            console.log(res.data)
+            setUser(res.data.user)
+            if(res.data.user){
+                navigate('/StudentProfile',{ replace: true, state: { user:true, accessToken:res.data.accessToken }})
+            }
         })
     }
 
@@ -41,31 +47,32 @@ export default function Student() {
             <div className="bg">
                 <div className="title">Student Registration Form</div>
                 <div className="form--bg">
+                {user===false && <div className='error'> ❗User with this email id is already exists</div>}
                     <Form>
                         <FloatingLabel
                             controlId="name"
                             label="Full name"
                             className="mb-3"
                         >
-                            <Form.Control name="name" type="text" placeholder="Enter your full name" onChange={(e)=>inputchangeHandler(e)}/>
+                            <Form.Control name="name" type="text" placeholder="Enter your full name" onChange={(e) => inputchangeHandler(e)} />
                         </FloatingLabel>
                         <FloatingLabel
                             controlId="email"
                             label="Email address"
                             className="mb-3"
                         >
-                            <Form.Control name="email" type="email" placeholder="name@example.com" onChange={(e)=>inputchangeHandler(e)}/>
+                            <Form.Control name="email" type="email" placeholder="name@example.com" onChange={(e) => inputchangeHandler(e)} />
                             <Form.Text className="text-muted">
                                 We'll never share your email with anyone else.
                             </Form.Text>
                         </FloatingLabel>
 
                         <FloatingLabel controlId="password" label="Password">
-                            <Form.Control name="password" type="password" placeholder="Password" onChange={(e)=>inputchangeHandler(e)}/>
+                            <Form.Control name="password" type="password" placeholder="Password" onChange={(e) => inputchangeHandler(e)} />
                         </FloatingLabel>
                         <br />
                         <FloatingLabel controlId="confirmPassword" label="Confirm Password">
-                            <Form.Control name="confirmPassword" type="password" placeholder="Password" onChange={(e)=>inputchangeHandler(e)}/>
+                            <Form.Control name="confirmPassword" type="password" placeholder="Password" onChange={(e) => inputchangeHandler(e)} />
                         </FloatingLabel>
                         <br />
                         <Row className="g-2">
@@ -73,7 +80,7 @@ export default function Student() {
                                 <FloatingLabel
                                     controlId="batch"
                                     label="Select your batch"
-                                    onChange={(e)=>inputchangeHandler(e)}
+                                    onChange={(e) => inputchangeHandler(e)}
                                 >
                                     <Form.Select name="batch" aria-label="Floating label select example">
                                         <option value="2019">2019</option>
@@ -85,7 +92,7 @@ export default function Student() {
                             </Col>
                             <Col md>
                                 <FloatingLabel controlId="cpi" label="CPI">
-                                    <Form.Control name="cpi" type="number" placeholder="name@example.com" onChange={(e)=>inputchangeHandler(e)}/>
+                                    <Form.Control name="cpi" type="number" placeholder="name@example.com" onChange={(e) => inputchangeHandler(e)} />
                                 </FloatingLabel>
                             </Col>
                         </Row>
@@ -98,20 +105,20 @@ export default function Student() {
                                     className="mb-3"
                                     column lg={2}
                                 >
-                                    <Form.Control type="number" placeholder="Enter your age" onChange={(e)=>inputchangeHandler(e)}/>
+                                    <Form.Control type="number" placeholder="Enter your age" onChange={(e) => inputchangeHandler(e)} />
                                 </FloatingLabel>
                             </Col>
                             <Col>
                                 <Row className="g-2">
                                     <Form.Label>Gender</Form.Label>
-                                    <div  id="gender" onChange={(e)=>genderChangeHandler(e)} key="inline-radio" className="mb-3">
+                                    <div id="gender" onChange={(e) => genderChangeHandler(e)} key="inline-radio" className="mb-3">
                                         <Form.Check
                                             inline
                                             label="Male"
                                             name="group1"
                                             type="radio"
                                             id="male"
-                                            // onChange={(e)=>inputchangeHandler(e)}
+                                        // onChange={(e)=>inputchangeHandler(e)}
                                         />
                                         <Form.Check
                                             inline
@@ -119,7 +126,7 @@ export default function Student() {
                                             name="group1"
                                             type="radio"
                                             id="female"
-                                            // onChange={(e)=>inputchangeHandler(e)}
+                                        // onChange={(e)=>inputchangeHandler(e)}
                                         />
                                         <Form.Check
                                             inline
@@ -127,7 +134,7 @@ export default function Student() {
                                             name="group1"
                                             type="radio"
                                             id="other"
-                                            // onChange={(e)=>inputchangeHandler(e)}
+                                        // onChange={(e)=>inputchangeHandler(e)}
                                         />
                                     </div>
                                 </Row>
@@ -135,11 +142,14 @@ export default function Student() {
                         </Row>
                         <Form.Label>TechStack</Form.Label>
                         {/* <Form.Control type="text" placeholder="Eg: HTML, CSS, JS,..." /> */}
-                        <Form.Control id="techStack" type="text" as="textarea" rows={2} placeholder="Eg: HTML, CSS, JS,..." onChange={(e)=>inputchangeHandler(e)}/>
+                        <Form.Control id="techStack" type="text" as="textarea" rows={2} placeholder="Eg: HTML, CSS, JS,..." onChange={(e) => inputchangeHandler(e)} />
                         <br />
-                        <Button variant="primary" type="submit" onClick={(e)=>{onSubmitHandler(e)}}>
-                            Submit
+                        <Button variant="primary" type="submit" onClick={(e) => { onSubmitHandler(e) }}>
+                            {/* <Link to="/StudentProfile" style={{ color: '#FFFFFF', textDecoration: "none " }}> */}
+                                Register
+                            {/* </Link> */}
                         </Button>
+                        <div className='footer'>Already have an account? <Link to="/Student/login">Login</Link></div>
                     </Form>
                 </div>
             </div>

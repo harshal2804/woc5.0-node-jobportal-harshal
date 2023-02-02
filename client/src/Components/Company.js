@@ -111,7 +111,7 @@ export default function Company() {
                         <Form.Control id="description" type="text" as="textarea" rows={2} placeholder="Eg: Our company is basically on React" onChange={(e)=>inputchangeHandler(e)}/>
                         <br />
                         <Button value="Submit" variant="primary" type="submit" onClick={(e)=>{onSubmitHandler(e)}}>
-                        <Link to="/CompanyProfile" style={{ color: '#FFFFFF', textDecoration: "none" }}>
+                        <Link to="/CompanyProfile" style={{ color: '#FFFFFF', textDecoration: "none " }}>
                             Submit
                         </Link>
                         </Button>

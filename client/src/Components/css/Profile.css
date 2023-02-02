@@ -4,7 +4,7 @@ body{
     background-color: #121212;
 }
 
-.companyProfile {
+.profile {
     height: 100%;
   display: flex;
   flex-direction: column;
@@ -12,7 +12,7 @@ body{
   gap: 30px;
 }
 
-.companyProfile .title {
+.profile .title {
   margin-top: 20px;
   font-family: "Poppins";
   font-weight: 300;
@@ -24,12 +24,12 @@ body{
   padding: 0px 9px;
 }
 
-.companyProfile > Table {
+.profile > Table {
   background-color: white;
   width: 900px;
 }
 
-.companyProfile .buttons{
+.profile .buttons{
     display: flex;
     gap: 20px;
 }

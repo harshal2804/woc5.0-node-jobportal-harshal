@@ -1,7 +1,7 @@
 import React from "react";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button"
-import "./css/CompanyProfile.css"
+import "./css/Profile.css"
 import { useState, useEffect } from "react";
 import axios from "axios"
 
@@ -17,7 +17,7 @@ export default function CompanyProfile() {
     }, []);
 
     return (
-        <div className="companyProfile">
+        <div className="profile">
             <div className="title">
                 Your Profile
             </div>

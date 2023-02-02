@@ -26,8 +26,7 @@
     width: 1102px;
     height: 800px;
     margin-top: 80px;
-    margin-bottom: 80px;
-    
+    margin-bottom: 80px; 
 
     border-radius: 20px; 
     box-shadow: 0 0 10px 10px grey;
@@ -38,11 +37,22 @@
 .studentSignIn .form--bg{
     margin: 0px;
     padding: 20px 20px;
-    height: 700px;
+    height: 730px;
     width: 500px;
     background: #D9D9D9;
     opacity: 0.82;
 
     border-radius: 20px; 
     
+}
+
+.studentSignIn .error{
+    margin-bottom: 10px;
+    font-family: 'Inter';
+    font-weight: 100;
+    color: red;
+}
+
+.studentSignIn .footer{
+    margin-top: 10px;
 }

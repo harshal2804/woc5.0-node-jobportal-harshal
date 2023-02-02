@@ -2,58 +2,103 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const app = express();
+const authRoute = require('./auth')
+
+require('dotenv').config()
+
+mongoose.set('strictQuery', true);
 
 app.use(bodyParser.json())
-app.use(express.static('../client/public'))
 app.use(bodyParser.urlencoded({
-    extended:true
+    extended: true
 }));
 app.use(cors())
+// app.use(express.json())
+app.use('/Student/auth', authRoute)
 
 
-mongoose.connect('mongodb://localhost:27017/JobPortal',{
+mongoose.connect('mongodb://localhost:27017/JobPortal', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
 
 var db = mongoose.connection;
 
-db.on('error',()=>console.log("Error in Connecting to Database"));
-db.once('open',()=>console.log("Connected to Database"));
+db.on('error', () => console.log("Error in Connecting to Database"));
+db.once('open', () => console.log("Connected to Database"));
 
-app.post("/",(req, res) => {
+app.post("/", (req, res) => {
     console.log(`Hello ${req.body.name}`);
 })
 
-app.post("/Student", (req, res) => {
+app.post("/Student", async (req, res) => {
+    console.log(req.body)
+    try {
+        const user = await db.collection('StudentDetails').findOne({ email:req.body.email })
+        console.log(user)
+        if(user){
+            return res.json({ status:'error', user:false })
+        }
 
-    var data = {
-        "name": req.body.name,
-        "email": req.body.email,
-        "password":  req.body.password,
-        "confirmPassword": req.body.confirmPassword,
-        "batch": req.body.batch,
-        "cpi": req.body.cpi,
-        "age": req.body.age,
-        "male": req.body.male,
-        "female": req.body.female,
-        "other": req.body.other,
-        "techStack": req.body.techStack
+        const accessToken = jwt.sign(req.body.email, process.env.ACCESS_TOKEN_SECRET)
+
+        const salt = await bcrypt.genSalt()
+        const hashedPassword = await bcrypt.hash(req.body.password, salt);
+        console.log(hashedPassword);
+        const data = { ...req.body, password: hashedPassword };
+
+        db.collection('StudentDetails').insertOne(data, (err, collection) => {
+            if (err) {
+                throw err;
+            }
+            console.log("Student signed up successfully!");
+        });
+        res.json({ status: 'ok', user: true, accessToken: accessToken })
+    } catch {
+        res.json({ status: 'error' })
     }
 
-    db.collection('StudentDetails').insertOne(data,(err,collection)=>{
-        if(err){
-            throw err;
+
+})
+
+app.get("/Student/login", (req, res) => {
+    res.send("Hello from /Srudent/login");
+})
+
+app.post("/Student/login", async (req, res) => {
+    const student = await db.collection('StudentDetails').findOne({ email: req.body.email });
+    if (student == null) {
+        res.json({ status: 'error', user: false })
+    }
+    try {
+        if (await bcrypt.compare(req.body.password, student.password)) {
+            const accessToken = jwt.sign(req.body.email, process.env.ACCESS_TOKEN_SECRET)
+            res.json({ status: 'ok', user: true, accessToken:accessToken })
         }
-        console.log("Record Inserted Successfully");
-    });
-    return res.redirect('Home.js')
+        else {
+            res.json({ status: 'error', user: false })
+        }
+    } catch {
+        res.status(500).send()
+    }
+})
+
+app.get("/StudentDetails", authenticateToken, async (req, res) => {
+
+    const student = await db.collection('StudentDetails').findOne({ email: req.email })
+    res.json(student)
+})
+
+app.delete("/StudentProfile", (req, res) => {
+    db.collection('StudentProfile').deleteMany({})
 })
 
 app.post("/CompanyProfile", (req, res) => {
-    db.collection('CompanyProfile').insertOne(req.body,(err,collection)=>{
-        if(err){
+    db.collection('CompanyProfile').insertOne(req.body, (err, collection) => {
+        if (err) {
             throw err;
         }
         console.log("Record Inserted Successfully");
@@ -63,30 +108,30 @@ app.post("/CompanyProfile", (req, res) => {
 app.get("/CompanyProfile", (req, res) => {
     db.collection('CompanyProfile').find({}).toArray(function (err, result) {
         if (err) {
-          res.status(400).send("Error fetching listings!");
-       } else {
-          res.json(result);
+            res.status(400).send("Error fetching listings!");
+        } else {
+            res.json(result);
+        }
+    })
+})
+
+app.get("/Company", (req, res) => {
+    db.collection('CompanyDetails').find({}).toArray(function (err, result) {
+        if (err) {
+            res.status(400).send("Error fetching listings!");
+        } else {
+            res.json(result);
         }
     })
 })
 
 app.post("/Company", (req, res) => {
 
-    var data = {
-        "companyName": req.body.companyName,
-        "email": req.body.email,
-        "password":  req.body.password,
-        "confirmPassword": req.body.confirmPassword,
-        "requiredAge": req.body.requiredAge,
-        "requiredCpi": req.body.requiredCpi,
-        "officialWebsite": req.body.officialWebsite,
-        "position": req.body.position,
-        "package": req.body.package,
-        "description": req.body.description
-    }
+    var data = req.body
+    data = {...data, requiredCpi: parseInt(req.body.requiredCpi, 10)}
 
-    db.collection('CompanyDetails').insertOne(data,(err,collection)=>{
-        if(err){
+    db.collection('CompanyDetails').insertOne(data, (err, collection) => {
+        if (err) {
             throw err;
         }
         console.log("Record Inserted Successfully");
@@ -94,12 +139,30 @@ app.post("/Company", (req, res) => {
     return res.redirect('Home.js')
 })
 
-app.get("/",(req, res) => {
-    res.set({
-        "Allow-access-Allow-Origin": '*'
+app.get("/CompanyList", async (req, res) => {
+    const student = req.query
+    console.log(typeof(student.cpi))
+    db.collection('CompanyDetails').find({ requiredCpi: { $lt: parseFloat(student.cpi, 10) }} ).toArray((err, result) => {
+        if (err) {
+            res.status(400).send("Error in fetching!")
+        }
+        else{
+            res.json(result);
+        }
     })
-    res.end("<h1>Hello form server</h1>")
-});
+})
+
+function authenticateToken(req, res, next) {
+    const authHeaders = req.headers['authorization']
+    const token = authHeaders && authHeaders.split(' ')[1]
+    if (token == null) return res.json({ status: 'error' })
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, email) => {
+        if (err) return res.json({ status: 'error' })
+        req.email = email
+        next()
+    })
+}
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
