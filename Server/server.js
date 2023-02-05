@@ -20,7 +20,7 @@ app.use(cors())
 app.use('/Student/auth', authRoute)
 
 
-mongoose.connect('mongodb://localhost:27017/JobPortal', {
+mongoose.connect('mongodb://127.0.0.1:27017/JobPortal', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
