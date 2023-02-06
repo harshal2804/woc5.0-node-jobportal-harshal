@@ -13,18 +13,9 @@ export default function StudentProfile() {
     const [data, setData] = useState([]);
     
     useEffect(() => {
-        // axios.get("http://localhost:5000/StudentDetails", {
-            //     headers: {
-                //         Authorization: 'Bearer '+ user.accessToken
-                //     }
-                // })
-                // .then(res => {
-                       // console.log(res)
-                    // })
         axios.get("http://localhost:5000/Student/auth/login/success", {
             params: location.state
         } ).then((res) => {
-            // console.log(res)
             if(res.status === 200){
                 axios.get("http://localhost:5000/StudentDetails", {
                     headers: {
@@ -32,7 +23,6 @@ export default function StudentProfile() {
                     }
                 })
                 .then(res => {
-                    // console.log(res)
                     setData(res.data)
                 })
             }
@@ -84,10 +74,6 @@ export default function StudentProfile() {
                     </tr>
                 </tbody>
             </Table>
-            <div className="buttons">
-                <Button variant="primary">Edit</Button>
-                <Button variant="danger">Delete</Button>
-            </div>
             <Button variant="info" onClick={(e) => onSubmitHandler(e)}>Search Company</Button>
         </div>
     )

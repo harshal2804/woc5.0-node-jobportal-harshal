@@ -21,9 +21,7 @@ export default function StudentLogin() {
 
     const onSubmitHandler = (e) => {
         e.preventDefault();
-        console.log(formData);
         axios.post("http://localhost:5000/Student/login", formData).then(res => {
-            console.log(res.data);
             if(res.data.user){
                 setUser(true);
                 navigate('/StudentProfile',{ replace: true, state: { user:true, accessToken:res.data.accessToken }})

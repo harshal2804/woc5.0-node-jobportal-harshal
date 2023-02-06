@@ -32,9 +32,7 @@ export default function Student() {
 
     const onSubmitHandler = (e) => {
         e.preventDefault();
-        console.log(formData);
         axios.post("http://localhost:5000/Student", formData).then(res => {
-            console.log(res.data)
             setUser(res.data.user)
             if(res.data.user){
                 navigate('/StudentProfile',{ replace: true, state: { user:true, accessToken:res.data.accessToken }})

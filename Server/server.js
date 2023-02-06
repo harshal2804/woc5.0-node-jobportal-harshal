@@ -30,21 +30,23 @@ var db = mongoose.connection;
 db.on('error', () => console.log("Error in Connecting to Database"));
 db.once('open', () => console.log("Connected to Database"));
 
+let salt
+async function generateSalt() {
+    salt = await bcrypt.genSalt();
+}
+generateSalt()
 
 app.post("/Student", async (req, res) => {
-    console.log(req.body)
     try {
         const user = await db.collection('StudentDetails').findOne({ email:req.body.email })
-        console.log(user)
         if(user){
             return res.json({ status:'error', user:false })
         }
 
         const accessToken = jwt.sign(req.body.email, process.env.ACCESS_TOKEN_SECRET)
 
-        const salt = await bcrypt.genSalt()
+        
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
-        console.log(hashedPassword);
         const data = { ...req.body, password: hashedPassword };
 
         db.collection('StudentDetails').insertOne(data, (err, collection) => {
@@ -86,29 +88,16 @@ app.get("/StudentDetails", authenticateToken, async (req, res) => {
 })
 
 app.post("/Company", async (req, res) => {
-
-    // var data = req.body
-    // data = {...data, requiredCpi: parseInt(req.body.requiredCpi, 10)}
-
-    // db.collection('CompanyDetails').insertOne(data, (err, collection) => {
-    //     if (err) {
-    //         throw err;
-    //     }
-    //     console.log("Record Inserted Successfully");
-    // });
-    // return res.redirect('Home.js')
     try {
         const user = await db.collection('CompanyDetails').findOne({ email:req.body.email })
-        console.log(user)
         if(user){
             return res.json({ status:'error', user:false })
         }
 
         const accessToken = jwt.sign(req.body.email, process.env.ACCESS_TOKEN_SECRET)
 
-        const salt = await bcrypt.genSalt()
+        
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
-        console.log(hashedPassword);
         const data = { ...req.body, password: hashedPassword };
 
         db.collection('CompanyDetails').insertOne(data, (err, collection) => {
@@ -149,7 +138,6 @@ app.get("/CompanyDetails", authenticateToken, async (req, res) => {
 
 app.get("/CompanyList", async (req, res) => {
     const student = req.query
-    console.log(typeof(student.cpi))
     db.collection('CompanyDetails').find({ requiredCpi: { $lt: parseFloat(student.cpi, 10) }} ).toArray((err, result) => {
         if (err) {
             res.status(400).send("Error in fetching!")

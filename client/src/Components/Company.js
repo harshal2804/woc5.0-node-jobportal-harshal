@@ -22,9 +22,7 @@ export default function Company() {
 
     const onSubmitHandler = (e) => {
         e.preventDefault();
-        console.log(formData);
         axios.post("http://localhost:5000/Company",formData).then(res => {
-            console.log(res);
             setUser(res.data.user)
             if(res.data.user){
                 navigate('/CompanyProfile',{ replace: true, state: { user:true, accessToken:res.data.accessToken }})

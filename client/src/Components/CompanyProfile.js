@@ -12,14 +12,12 @@ export default function CompanyProfile() {
     const location = useLocation()
 
     useEffect(() => {
-        console.log(location.state.accessToken)
         axios.get("http://localhost:5000/CompanyDetails", {
                     headers: {
                         Authorization: 'Bearer '+ location.state.accessToken
                     }
                 })
                 .then(res => {
-                    console.log(res.data)
                     setData(res.data)
                 })
     }, []);
@@ -71,10 +69,6 @@ export default function CompanyProfile() {
                     </tr>
                 </tbody>
             </Table>
-            <div className="buttons">
-                <Button variant="primary">Edit</Button>
-                <Button variant="danger">Delete</Button>
-            </div>
         </div>
     )
 }
