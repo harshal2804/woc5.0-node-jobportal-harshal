@@ -13,11 +13,11 @@ export default function StudentProfile() {
     const [data, setData] = useState([]);
     
     useEffect(() => {
-        axios.get("http://localhost:5000/Student/auth/login/success", {
+        axios.get("https://woc5-0-node-jobportal-harshal.onrender.com/Student/auth/login/success", {
             params: location.state
         } ).then((res) => {
             if(res.status === 200){
-                axios.get("http://localhost:5000/StudentDetails", {
+                axios.get("https://woc5-0-node-jobportal-harshal.onrender.com/StudentDetails", {
                     headers: {
                         Authorization: 'Bearer '+ location.state.accessToken
                     }

@@ -12,7 +12,7 @@ export default function CompanyProfile() {
     const location = useLocation()
 
     useEffect(() => {
-        axios.get("http://localhost:5000/CompanyDetails", {
+        axios.get("https://woc5-0-node-jobportal-harshal.onrender.com/CompanyDetails", {
                     headers: {
                         Authorization: 'Bearer '+ location.state.accessToken
                     }

@@ -21,7 +21,7 @@ export default function StudentLogin() {
 
     const onSubmitHandler = (e) => {
         e.preventDefault();
-        axios.post("http://localhost:5000/Student/login", formData).then(res => {
+        axios.post("https://woc5-0-node-jobportal-harshal.onrender.com/Student/login", formData).then(res => {
             if(res.data.user){
                 setUser(true);
                 navigate('/StudentProfile',{ replace: true, state: { user:true, accessToken:res.data.accessToken }})
