@@ -22,6 +22,7 @@ app.use('/Student/auth', authRoute)
 
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
+    useCreateIndex: true,
     useUnifiedTopology: true
 });
 
