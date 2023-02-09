@@ -8,7 +8,7 @@ import StudentProfile from './Components/StudentProfile';
 import StudentLogin from './Components/StudentLogin'
 import CompanyLogin from './Components/CompanyLogin'
 import {
-  createBrowserRouter,
+  createHashRouter,
   Navigate,
   RouterProvider,
 } from "react-router-dom";
@@ -27,7 +27,7 @@ function App() {
     .catch(err => console.log(err))
   }, [])
 
-  const router = createBrowserRouter([
+  const router = createHashRouter([
     {
       path: "/",
       element: <Home />,
