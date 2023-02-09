@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/woc5.0-node-jobportal-harshal/static/css/main.03c512ad.css",
+    "main.js": "/woc5.0-node-jobportal-harshal/static/js/main.84cafb7a.js",
+    "static/media/Student3.jpg": "/woc5.0-node-jobportal-harshal/static/media/Student3.f582262fb6b0e9d51fc9.jpg",
+    "static/media/studentPortal.jpg": "/woc5.0-node-jobportal-harshal/static/media/studentPortal.a23d3cdae2d5f5580b86.jpg",
+    "static/media/Company3.jpg": "/woc5.0-node-jobportal-harshal/static/media/Company3.210d4d0e37cb49aa9e4f.jpg",
+    "static/media/companyPortal.jpg": "/woc5.0-node-jobportal-harshal/static/media/companyPortal.140ff642c8092cdc64a9.jpg",
+    "index.html": "/woc5.0-node-jobportal-harshal/index.html",
+    "main.03c512ad.css.map": "/woc5.0-node-jobportal-harshal/static/css/main.03c512ad.css.map",
+    "main.84cafb7a.js.map": "/woc5.0-node-jobportal-harshal/static/js/main.84cafb7a.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.03c512ad.css",
+    "static/js/main.84cafb7a.js"
+  ]
+}
