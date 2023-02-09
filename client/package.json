@@ -1,5 +1,5 @@
 {
-  "homepage": "http://harshal2804.github.io/woc5.0-node-jobportal-harshal",
+  "homepage": "https://harshal2804.github.io/woc5.0-node-jobportal-harshal",
   "name": "client",
   "version": "0.1.0",
   "proxy": "https://woc5-0-node-jobportal-harshal.onrender.com",
@@ -23,8 +23,7 @@
     "deploy": "gh-pages -d build",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "publish": "gh-pages -d src"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
