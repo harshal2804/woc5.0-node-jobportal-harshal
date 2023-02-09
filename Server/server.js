@@ -99,7 +99,7 @@ app.post("/Company", async (req, res) => {
 
         
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
-        const data = { ...req.body, password: hashedPassword };
+        const data = { ...req.body, password: hashedPassword, requiredCpi: parseFloat(req.body.requiredCpi, 10) };
 
         db.collection('CompanyDetails').insertOne(data, (err, collection) => {
             if (err) {
